@@ -1,0 +1,137 @@
+// add employee
+if (isset($_POST['save_form'])) {
+   
+$bon_serial = $_POST['bon_serial'];
+$category = $_POST['category'];
+$Side = $_POST['Side'];
+$benz_type = $_POST['benz_type'];
+$query_bon = "SELECT id,number, category, Side, benz_type,total, DATE_FORMAT(date, '%Y-%m-%d') AS today FROM matching_bons WHERE DATE(date) = CURDATE() AND category = '$category' AND benz_type = '$benz_type' AND Side = '$Side' ";
+$result_bon = mysqli_query($conn, $query_bon);
+if ($result_bon)
+{
+    while($row_bon = mysqli_fetch_assoc($result_bon))
+    {
+        $category_pre =$row_bon ['category'];
+        $number_pre = $row_bon['number'];
+        $dates = $row_bon['today'];
+        $id = $row_bon['id'];
+        $old_total = $row_bon ['total'];
+        if ($category == $category_pre) {
+            $date = date("Y-m-d");
+            $number = $number_pre + 1;
+            $query1 = "UPDATE matching_bons
+                       SET number = ?, category = ?, benz_type = ?, side = ?, total = ?
+                       WHERE category = '$category_pre' AND benz_type = '$benz_type' AND side = '$Side' AND date = '$date' AND id = '$id'";
+        }
+        else {
+            $number = 1;
+
+        $query1 = "INSERT INTO matching_bons (number, category, benz_type, Side, total)
+        VALUES (?, ?, ?, ?, ?)";
+        }
+    }
+}
+   
+    $query = "SELECT solar_price, ben80_price, ben92_price, ben95_price FROM benzene_price ORDER BY date DESC LIMIT 1";
+
+    $result_booking = mysqli_query($conn, $query);
+
+    // Check if the query was executed successfully
+    if ($result_booking) {
+        $row = mysqli_fetch_assoc($result_booking);
+        // Count the number of output students
+        $num_clients = mysqli_num_rows($result_booking);
+
+        if ($benz_type == "سولار")
+        {
+            $solar_price = $row['solar_price'];
+            $total_solar = $solar_price * $category ;
+        }
+        elseif ($benz_type == "بنزين 80")
+        {
+            $solar_price = $row['ben80_price'];
+            $total_solar = $solar_price * $category ;
+        } elseif ($benz_type == "بنزين 92")
+        {
+            $solar_price = $row['ben92_price'];
+            $total_solar = $solar_price * $category ;
+        } elseif ($benz_type == "بنزين 95")
+        {
+            $solar_price = $row['ben95_price'];
+            $total_solar = $solar_price * $category ;
+        }
+
+        
+    $photo = $_FILES['photo']['name'];
+    $target_dir = "uploads/";
+    $target_files = array();
+    
+    $target_dir = "uploads/";
+    $target_files = array();
+    for ($i = 0; $i < count($photo); $i++) {
+        $target_file = $target_dir . basename($photo[$i]);
+        move_uploaded_file($_FILES["photo"]["tmp_name"][$i], $target_file);
+        array_push($target_files, $target_file);
+    }
+    // Convert the array of target files to a comma-separated string
+    $photo = implode(",", $target_files);
+    $sql = "INSERT INTO bons (bon_serial, category, price,  benz_type, Side, total, photo)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+            
+           
+           
+$old_total2 = $old_total + $total_solar;
+   // Initialize and prepare the statements
+$stmt = mysqli_stmt_init($conn);
+$stmt2 = mysqli_stmt_init($conn);
+
+if (!mysqli_stmt_prepare($stmt, $sql) || !mysqli_stmt_prepare($stmt2, $query1)) {
+    die(mysqli_error($conn));
+}
+
+// Bind parameters and execute first statement
+mysqli_stmt_bind_param($stmt, "sssssss",
+    $bon_serial,
+    $category,
+    $solar_price,
+    $benz_type,
+    $Side,
+    $total_solar,
+    $photo
+);
+    // Bind parameters and execute second statement
+    mysqli_stmt_bind_param($stmt2, "sssss",
+        $number,
+        $category,
+        $benz_type,
+        $Side,
+        $old_total2
+    );
+
+    if (mysqli_stmt_execute($stmt2)) {
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        mysqli_stmt_close($stmt2);
+
+        // Unset the POST variables after successful insertion
+        unset($bon_serial);
+        unset($category);
+        unset($Side);
+        unset($benz_type);
+        unset($solar_price);
+        unset($total_solar);
+
+        header('Location: bons.php');
+        exit;
+    }
+
+    else {
+        echo '<script>alert("حدث خطأ أثناء ادخال البيانات"); window.location.href = "bons.php";</script>';
+        exit;
+    }
+
+}else {
+    echo '<script>alert("حدث خطأ أثناء ادخال البيانات"); window.location.href = "bons.php";</script>';
+    exit;
+}
+}

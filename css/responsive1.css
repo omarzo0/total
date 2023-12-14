@@ -1,0 +1,187 @@
+/* Default styles */
+
+/* Your existing CSS styles */
+
+/* Media query for small screens (mobile) */
+@media screen and (max-width: 767px) {
+    .nav1 h1 {
+      margin-left: 170px;
+      margin-top: 10px;
+      align-items: center;
+    }
+  
+    .table,
+    .table-data,
+    .header__item {
+      margin-left: 10;
+      margin-right: -20;
+    }
+    .table-header
+    {
+        width: 250px;
+        margin-left: 180px;
+    }
+    .table-row
+    {
+        margin-left: 180px;
+        width: 250px;
+
+    }
+    .but
+    {
+        display: flex;
+        justify-content: center;
+        margin-left: -300px;
+    }
+
+    .form-row1 {
+      padding-left: 20px;
+      margin-left: -40;
+      margin-top: 10px;
+      text-align: center;
+      width: 100px;
+    }
+  
+    .form-row1 input {
+      margin-left: 0;
+      width: 100%;
+    }
+  
+    .form-cont {
+      margin-left: -800px;
+    }
+  
+    .form-cont2 {
+      margin-left: 200px;
+    }
+  
+    .aear {
+      margin-left: 30px;
+      font-size: 20px;
+      margin-top: 30px;
+    }
+  
+    .container {
+      margin-right: 0;
+    }
+    .save2
+    {
+        margin-left: -200px;
+    }
+    .cal
+    {
+        margin-left: 100px;
+
+    }
+    .formcont3
+    {
+        margin-top: 220px;
+        margin-left: -670px;
+    }
+   
+  }
+  
+  
+  /* Media query for medium screens (tablet) */
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .nav1 h1 {
+      margin-left: 150px;
+      margin-top: 10px;
+    }
+  
+    .nav1 .cal {
+      margin-top: 0;
+      margin-left: 30px;
+    }
+  
+    .table,
+    .table-header,
+    .table-row,
+    .table-data,
+    .header__item {
+      margin-left: 10px;
+      margin-right: -20px;
+    }
+  
+    .form-row1 {
+      padding-left: 20px;
+      margin-left: 60px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  
+    .form-row1 input {
+      margin-left: 0;
+      width: 100%;
+    }
+  
+    .form-cont {
+      margin-left: 0;
+    }
+  
+    .form-cont2 {
+      margin-left: 0;
+    }
+  
+    .aear {
+      margin-left: 490px;
+      font-size: 20px;
+      margin-top: 30px;
+    }
+  
+    .container {
+      margin-right: 20px;
+    }
+  }
+  
+  /* Media query for large screens (desktop and above) */
+  @media screen and (min-width: 1024px) {
+    .nav1 h1 {
+      margin-left: 900px;
+      margin-top: 30px;
+    }
+  
+    .nav1 .cal {
+      margin-top: -30px;
+      margin-left: 40px;
+    }
+  
+    .table,
+    .table-header,
+    .table-row,
+    .table-data,
+    .header__item {
+      margin-left: 50px;
+      margin-right: 0;
+    }
+  
+    .form-row1 {
+      padding-left: 40px;
+      margin-left: 100px;
+      margin-top: 30px;
+    }
+  
+    .form-row1 input {
+      margin-left: -100px;
+      width: 150px;
+    }
+  
+    .form-cont {
+      margin-left: 100px;
+    }
+  
+    .form-cont2 {
+      margin-left: 120px;
+    }
+  
+    .aear {
+      margin-left: 490px;
+      font-size: 20px;
+      margin-top: 30px;
+    }
+  
+    .container {
+      margin-right: 100px;
+    }
+  }
+  

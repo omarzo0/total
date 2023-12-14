@@ -1,0 +1,53 @@
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .nav1 h1 {
+      margin-left: 150px;
+      margin-top: 10px;
+    }
+  
+    .nav1 .cal {
+      margin-top: 0;
+      margin-left: 100px;
+    }
+  
+    .form-row1 {
+      padding-left: 20px;
+      margin-left: -150px;
+      margin-top: 10px;
+      text-align: center;
+    }
+  
+    .form-row1 input {
+      margin-left: 0;
+      width: 200px;
+    }
+    .but
+    {
+        display: flex;
+        justify-content: center;
+        margin-left: -300px;
+    }
+    .but2
+    {
+        display: flex;
+        justify-content: center;
+        margin-left: -140px;
+        margin-bottom: -53px;
+    }
+  
+  
+   
+
+  
+    .table,
+    .table-header,
+    .table-row,
+    .table-data,
+    .header__item {
+      margin-left: 10px;
+      margin-right: -20px;
+      width: 550px;
+    }
+  
+  }
+  

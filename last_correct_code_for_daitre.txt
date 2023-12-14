@@ -1,0 +1,108 @@
+<?php
+// Display data in the table
+if ($num_clients === 0) {
+    echo '<div class="table-row">لا توجد بيانات<br><br></div>';
+} else {
+    // Fetch the prices of each type from benzene_price table
+    $queryPrices = "SELECT * FROM benzene_price ORDER BY date DESC LIMIT 1";
+    $resultPrices = mysqli_query($conn, $queryPrices);
+    $pricesRow = mysqli_fetch_assoc($resultPrices);
+
+    $solar_price = $pricesRow['solar_price'];
+    $ben80_price = $pricesRow['ben80_price'];
+    $ben92_price = $pricesRow['ben92_price'];
+    $ben95_price = $pricesRow['ben95_price'];
+
+    $totals = array(); // Initialize an associative array to store totals for each trumba_type
+    $grandTotal = 0; // Initialize the grand total variable
+
+    while ($row = mysqli_fetch_assoc($result2)) {
+        $trumba_type = $row['trumba_type'];
+
+        // Check if the trumba_type exists in the $totals array
+        if (array_key_exists($trumba_type, $totals)) {
+            // If exists, add the current total to the existing total
+            $totals[$trumba_type] += $row['total'];
+        } else {
+            // If not exists, initialize the total for the trumba_type
+            $totals[$trumba_type] = $row['total'];
+        }
+
+        // Update the grand total by adding the current row's total multiplied by its price
+        $grandTotal += ($row['total'] * getPriceByType($trumba_type));
+    }
+
+    // Fetch data from the oil_ward table
+    $queryOil = "SELECT SUM(saled) AS total_saled, SUM(price) AS total_price FROM oil_ward";
+    $resultOil = mysqli_query($conn, $queryOil);
+    $oilRow = mysqli_fetch_assoc($resultOil);
+
+    // Calculate the total sales and total price for the oil row
+    $totalSaledOil = $oilRow['total_saled'];
+    $totalPriceOil = $oilRow['total_price'];
+
+    // Update the grand total by adding the totalPriceOil to it
+    $grandTotal += $totalPriceOil;
+
+    // Fetch data from the بونات table
+    $queryBonat = "SELECT COUNT(*) AS total_rows, SUM(total) AS total_values FROM bons";
+    $resultBonat = mysqli_query($conn, $queryBonat);
+    $bonatRow = mysqli_fetch_assoc($resultBonat);
+
+    // Calculate the total number of rows and total values for the بونات table
+    $totalRowsBonat = $bonatRow['total_rows'];
+    $totalValuesBonat = $bonatRow['total_values'];
+
+    // Now, we can loop through the $totals array to display the table
+    foreach ($totals as $trumba_type => $total) {
+        echo '<div class="table-row">';
+        echo '<div class="table-data">' . ($total * getPriceByType($trumba_type)) . '</div>';
+        echo '<div class="table-data">' . getPriceByType($trumba_type) . '</div>';
+        echo '<div class="table-data">' . $total . '</div>';
+        echo '<div class="table-data">' . $trumba_type . '</div>';
+        echo '</div>';
+    }
+
+    // Display the "oil" row
+    echo '<div class="table-row">';
+    echo '<div class="table-data">' . $totalPriceOil . '</div>';
+    echo '<div class="table-data">' . '-' . '</div>';
+    echo '<div class="table-data">' . $totalSaledOil . '</div>';
+    echo '<div class="table-data">زيت</div>';
+    echo '</div>';
+
+    // Display the grand total
+    echo '<div class="table-row">';
+    echo '<div class="table-data">' . ($grandTotal) . '</div>';
+    echo '<div class="table-data">'.'-'.'</div>'; // Empty cell for price column in the grand total row
+    echo '<div class="table-data">'.'-'.'</div>'; // Empty cell for total column in the grand total row
+    echo '<div class="table-data">الاجمالي</div>';
+    echo '</div>';
+
+    // Display the "بونات" row
+    echo '<div class="table-row">';
+    echo '<div class="table-data">' . $totalValuesBonat . '</div>';
+    echo '<div class="table-data">' . '-' . '</div>'; // Empty cell for price column in the "بونات" row
+    echo '<div class="table-data">' . $totalRowsBonat . '</div>';
+    echo '<div class="table-data">بونات</div>';
+    echo '</div>';
+}
+
+// Function to get the price by type from the fetched prices
+function getPriceByType($type)
+{
+    global $solar_price, $ben80_price, $ben92_price, $ben95_price;
+    switch ($type) {
+        case 'سولار':
+            return $solar_price;
+        case 'بنزين 80':
+            return $ben80_price;
+        case 'بنزين 92':
+            return $ben92_price;
+        case 'بنزين 95':
+            return $ben95_price;
+        default:
+            return 0;
+    }
+}
+?>
